@@ -64,32 +64,10 @@ class CreditCardViewModel(private val articleRepository: ArticleEntityRepository
         MutableLiveData<Resource<Boolean>>()
 
 
-    fun getAllArticles(query: String, apiKey: String) = viewModelScope.launch {
-        getAllArticlesResponseLiveData.setLoading()
-        try {
-            val pDriverProfileResponse =
-                repository.getAllArticles(query, apiKey)
-            articleRepository.addListArticles(pDriverProfileResponse.articles)
-            val articleDataFromLocal = articleRepository.getAllArticles()
-            getAllArticlesResponseLiveData.setSuccess(
-                data = articleDataFromLocal,
-                message = null
-            )
-        } catch (e: Exception) {
-            getAllArticlesResponseLiveData.setError(
-                Resource(
-                    data = e?.message,
-                    message = "oops something went wrong",
-                    state = ResourceState.ERROR
-                )
-            )
-            e.printStackTrace()
-            return@launch
-        }
-    }
+    suspend fun getAllArticles(query: String, apiKey: String) = repository.getAllArticles(query, apiKey)
 
 
-    fun fetchDataFromLocal() = viewModelScope.launch {
+/*    fun fetchDataFromLocal() = viewModelScope.launch {
         getAllArticlesResponseLiveData.setLoading()
         try {
             val articleDataFromLocal = articleRepository.getAllArticles()
@@ -98,13 +76,13 @@ class CreditCardViewModel(private val articleRepository: ArticleEntityRepository
                 message = null
             )
         } catch (e: Exception) {
-            getAllArticlesResponseLiveData.setError(
-                Resource(
+*//*            getAllArticlesResponseLiveData.setError(
+*//**//*                Resource(
                     data = e?.message,
                     message = "oops something went wrong",
                     state = ResourceState.ERROR
-                )
-            )
+                )*//**//*
+            )*//*
             e.printStackTrace()
             return@launch
         }
@@ -152,7 +130,7 @@ class CreditCardViewModel(private val articleRepository: ArticleEntityRepository
         }
 
 
-    }
+    }*/
 
 
 

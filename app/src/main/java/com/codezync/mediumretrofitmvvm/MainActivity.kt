@@ -28,7 +28,7 @@ class MainActivity : ComponentActivity() {
             this,
             CreditCartViewModelFactory(repository)
         ).get(CreditCardViewModel::class.java)
-        creditCardViewModel.isLocalStorageEmpty()
+       // creditCardViewModel.isLocalStorageEmpty()
         setContent {
             MediumRetrofitMVVMTheme {
                 // A surface container using the 'background' color from the theme

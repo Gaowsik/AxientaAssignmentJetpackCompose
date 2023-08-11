@@ -5,9 +5,8 @@ package com.codezync.meadiummvvmexample.state_models
  * @create 10/20/2020 10:25 AM
  */
 
-data class Resource<out T> constructor(
-    val state: ResourceState,
-    val data: T? = null,
-    var message: String? = null,
-    var responseCode: Int? = null,
-)
+sealed class Resource<T>(val data: T? = null, val message: String? = null) {
+    class Success<T>(data: T) : Resource<T>(data)
+    class Error<T>(message: String, data: T? = null) : Resource<T>(data, message)
+    class Loading<T> : Resource<T>()
+}

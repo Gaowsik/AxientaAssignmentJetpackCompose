@@ -16,3 +16,27 @@ fun Article.toArticleEntity(): ArticleEntity {
         urlToImage = this.urlToImage
     )
 }
+
+fun List<Article>.toArticleEntityList(): List<ArticleEntity> {
+    var list = mutableListOf<ArticleEntity>()
+    this.forEach {
+        it
+        list.add(
+            ArticleEntity(
+                author = it.author,
+                content = it.content,
+                description = it.description,
+                publishedAt = it.publishedAt,
+                sourceId = it.source.id,
+                sourceName = it.source.name,
+                title = it.title,
+                url = it.url,
+                urlToImage = it.urlToImage
+            )
+        )
+
+
+    }
+
+    return list
+}
