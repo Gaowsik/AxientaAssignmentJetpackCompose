@@ -1,6 +1,7 @@
 package com.codezync.mediumretrofitmvvm.view
 
 import android.content.Context
+import android.content.LocusId
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.gestures.detectTapGestures
@@ -35,9 +36,15 @@ import com.codezync.toArticleEntityList
 @Composable
 fun CreditCardScreen(viewModel: CreditCardViewModel, context: Context) {
 
-    val newsResponse = produceState<Resource<ArticleResponse>>(initialValue = Resource.Loading()) {
-        value = viewModel.getAllArticles(QUERY_VALUE, "39855b9e16bf4b21aabeaa39806004dd")
-    }.value
+    val newsResponse =
+        produceState<Resource<List<ArticleEntity>>>(initialValue = Resource.Loading()) {
+            value = if (viewModel.getAllArticlesFromLocal().data.isNullOrEmpty()) {
+                viewModel.getAllArticles(QUERY_VALUE, "39855b9e16bf4b21aabeaa39806004dd")
+            } else {
+                viewModel.getAllArticlesFromLocal()
+            }
+
+        }.value
 
     NewsResponseStateWrapper(newsResponse)
 
@@ -121,14 +128,14 @@ fun CreditCardItem(article: ArticleEntity?) {
 
 @Composable
 fun NewsResponseStateWrapper(
-    pokemonInfo: Resource<ArticleResponse>,
+    pokemonInfo: Resource<List<ArticleEntity>>,
     modifier: Modifier = Modifier,
     loadingModifier: Modifier = Modifier
 ) {
     when (pokemonInfo) {
         is Resource.Success -> {
             showrecyclerView(
-                pokemonInfo.data!!.articles.toArticleEntityList()
+                pokemonInfo.data
             )
 
         }

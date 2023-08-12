@@ -20,118 +20,13 @@ import kotlinx.coroutines.launch
 class CreditCardViewModel(private val articleRepository: ArticleEntityRepository) : ViewModel() {
     private val repository = CreditCardRepository()
 
+    suspend fun getAllArticles(query: String, apiKey: String) =
+        repository.getAllArticles(query, apiKey).also {
 
-
-/*    private val _creditCards = MutableLiveData<CreditCardResponse>()
-    val creditCards: LiveData<CreditCardResponse> = _creditCards
-
-    private val _articleLiveData = MutableLiveData<List<Article>>()
-    val articleLiveData: LiveData<List<Article>> = _articleLiveData
-
-    fun fetchCreditCards() {
-        viewModelScope.launch {
-            try {
-                val cards = repository.getCreditCards()
-                _creditCards.value = cards
-            } catch (e: Exception) {
-                // Handle error
-            }
-        }
-    }
-
-
-   fun getAllArticles(query : String,apiKey : String) {
-        viewModelScope.launch {
-            try {
-                val articles = repository.getAllArticles(query,apiKey)
-                _articleLiveData.value = articles.articles
-                articleRepository.addListArticles(articles.articles)
-            } catch (e: Exception) {
-                // Handle error
-                Log.d("error","error")
-            }
-        }
-    }*/
-
-
-    var getAllArticlesResponseLiveData: MutableLiveData<Resource<List<ArticleEntity>>> =
-        MutableLiveData<Resource<List<ArticleEntity>>>()
-
-    var isDataDeletedLiveData: MutableLiveData<Resource<Boolean>> =
-        MutableLiveData<Resource<Boolean>>()
-
-    var isLocalStorageEmpty: MutableLiveData<Resource<Boolean>> =
-        MutableLiveData<Resource<Boolean>>()
-
-
-    suspend fun getAllArticles(query: String, apiKey: String) = repository.getAllArticles(query, apiKey)
-
-
-/*    fun fetchDataFromLocal() = viewModelScope.launch {
-        getAllArticlesResponseLiveData.setLoading()
-        try {
-            val articleDataFromLocal = articleRepository.getAllArticles()
-            getAllArticlesResponseLiveData.setSuccess(
-                data = articleDataFromLocal,
-                message = null
-            )
-        } catch (e: Exception) {
-*//*            getAllArticlesResponseLiveData.setError(
-*//**//*                Resource(
-                    data = e?.message,
-                    message = "oops something went wrong",
-                    state = ResourceState.ERROR
-                )*//**//*
-            )*//*
-            e.printStackTrace()
-            return@launch
-        }
-    }
-
-    fun isLocalStorageEmpty() = viewModelScope.launch {
-        isLocalStorageEmpty.setLoading()
-        try {
-            val articleDataFromLocal = articleRepository.getAllArticles()
-            isLocalStorageEmpty.setSuccess(
-                data = articleDataFromLocal.isNullOrEmpty(),
-                message = null
-            )
-        } catch (e: Exception) {
-            isLocalStorageEmpty.setError(
-                Resource(
-                    data = e?.message,
-                    message = "oops something went wrong",
-                    state = ResourceState.ERROR
-                )
-            )
-            e.printStackTrace()
-            return@launch
+            it.data?.let { it1 -> articleRepository.addListArticles(it1) }
         }
 
-
-    }
-
-
-    fun deleteDataFromDB(article: ArticleEntity) = viewModelScope.launch {
-        isDataDeletedLiveData.setLoading()
-        try {
-            articleRepository.deleteArticle(article.id)
-            isDataDeletedLiveData.setSuccess(true, "")
-        } catch (e: Exception) {
-            isDataDeletedLiveData.setError(
-                Resource(
-                    data = e?.message,
-                    message = "oops something went wrong",
-                    state = ResourceState.ERROR
-                )
-            )
-            e.printStackTrace()
-            return@launch
-        }
-
-
-    }*/
-
+    suspend fun getAllArticlesFromLocal() = articleRepository.getAllArticles()
 
 
 }
